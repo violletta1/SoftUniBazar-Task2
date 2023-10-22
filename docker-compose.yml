@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+    sqlserver: 
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=myStrongPassword13#
+        ports:
+            - '1433:1433'
+        volumes:
+            - sqldata:/var/opt/mssql
+        container_name: sqlserver
+        image: mcr.microsoft.com/mssql/server
+        deploy:
+          resources:
+            reservations:
+              cpus: '2'
+              memory: 2GB
+    web_app:
+        container_name: web-app
+        domainname: violetta1
+        image: violetta1bazarscr.azurecr.io/violetta1softunibazar
+        ports:
+          - '80:80'
+
+        restart: on-failure
+volumes:
+  sqldata:
+    driver: azure_file
+    driver_opts:
+      share_name: sql-volume
+      storage_account_name: violetta1bazarsa
